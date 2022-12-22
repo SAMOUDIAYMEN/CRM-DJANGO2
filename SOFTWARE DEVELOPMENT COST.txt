@@ -1,0 +1,28 @@
+SOFTWARE DEVELOPMENT COST CALCULATOR (models)
+------------------------------------
+table project :
+	id
+	project name
+	project decription
+	client id
+
+table client:
+	id
+	fullname
+	email
+	phone
+	
+table tasks:
+	id
+	task name
+	cost per Houre
+	duration
+	total cost
+	
+table invoice :
+	id
+	invoiceid
+	projectid
+	expense table
+	project duration automatic
+	note

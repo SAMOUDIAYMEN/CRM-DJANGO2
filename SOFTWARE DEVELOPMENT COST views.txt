@@ -1,0 +1,27 @@
+SOFTWARE DEVELOPMENT COST CALCULATOR (views)
+------------------------------------
+login
+	-dashboard (*shortcuts, *reports, *diagrams)
+	-projects
+		-list
+		-add
+		-edit
+		-delete
+	-clients
+		-list
+		-add
+		-edit
+		-delete
+	-tasks
+		-list
+		-add
+		-edit
+		-delete
+	-invoices
+		-list
+		-add (data : [invoice id, {client info}, {project info}, {task editable table}, note])
+		-edit
+		-delete
+	-profile
+		-change email
+		-change password
