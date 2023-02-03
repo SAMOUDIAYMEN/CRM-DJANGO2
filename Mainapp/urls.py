@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from Mainapp.views import project, customer, profile, createProject, updateProject, deleteProject, createCustomer, updateCustomer, deleteCustomer, createProfile, updateProfile, deleteProfile,register_request,login_request,logout_request,task, createTask, updateTask, deleteTask, profilePage
+from Mainapp.views import project, customer, profile, createProject, updateProject, deleteProject, createCustomer, updateCustomer, deleteCustomer, createProfile, updateProfile, deleteProfile,register_request,login_request,logout_request,task, createTask, updateTask, deleteTask, profilePage,createInvoice, updateInvoice, deleteInvoice, invoice
 
 from . import views
 
@@ -14,6 +14,12 @@ urlpatterns = [
     path('create-Task/', createTask, name='create-Task'),
     path('update-Task/<str:pk>/', updateTask, name='update-Task'),
     path('delete-Task/<str:pk>/', deleteTask, name='delete-Task'),
+
+    path('Invoice/', invoice, name='invoice'),
+    path('create-Invoice/', createInvoice, name='create-Invoice'),
+    path('update-Invoice/<str:pk>/', updateInvoice, name='update-Invoice'),
+    path('delete-Invoice/<str:pk>/', deleteInvoice, name='delete-Invoice'),
+
 
     path('customer/', customer, name='customer'),
     path('create-customer/', createCustomer, name='create-customer'),

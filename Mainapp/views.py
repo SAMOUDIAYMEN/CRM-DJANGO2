@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from Mainapp.forms import ProjectForm,CustomerForm,ProfileForm,NewUserForm,TaskForm
-from Mainapp.models import Customer, Project,Profile,Task
+from Mainapp.forms import ProjectForm,CustomerForm,ProfileForm,NewUserForm,TaskForm,InvoiceForm
+from Mainapp.models import Customer, Project,Profile,Task, Invoice
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.forms import AuthenticationForm ,UserChangeForm
@@ -9,9 +9,6 @@ def home(request):
     page_title = 'dashboard'
     all_projects = Project.objects.all()
     total_projects = all_projects.count()
-    delivered = all_projects.filter(status='fait').count()
-    pending = all_projects.filter(status='en attente').count()
-    processing = all_projects.filter(status='en traitement').count()
     all_customers = Customer.objects.all()
     total_customers = all_customers.count()
     total_profiles = Customer.objects.all().count()
@@ -20,9 +17,6 @@ def home(request):
         'title': page_title,
         'projects': all_projects,
         'total_projects': total_projects,
-        'delivered': delivered,
-        'pending': pending,
-        'processing':processing,
         'customers': all_customers,
         'total_customers': total_customers,
         'total_profiles':total_profiles
@@ -152,6 +146,77 @@ def updateTask(request, pk):
 def deleteTask(request, pk):
     page_title = 'Supprimer la Tâche'
     tas = Task.objects.get(id=pk)
+
+    if request.method == 'POST':
+        tas.delete()
+        return redirect('/')
+
+    context = {
+        'title': page_title,
+        'item': tas
+    }
+
+    template = 'partials/delete.html'
+    return render(request, template, context)
+
+def invoice(request):
+    page_title = 'tous les Factures'
+    all_invoices = Invoice.objects.all()
+    all_invoices_count = Invoice.objects.all().count()
+
+    context = {
+        'title': page_title, 
+        'data': all_invoices, 
+        'data_count':all_invoices_count
+    }
+    template = 'Mainapp/invoice_list.html'
+
+    return render(request, template, context)
+
+def createInvoice(request):
+    page_title = 'Créer un Facture'
+    form = InvoiceForm()
+    all_tasks = Task.objects.all()
+    all_projects = Project.objects.all()
+
+    if request.method == 'POST':
+        form = InvoiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {
+        'title': page_title,
+        'form': form,
+        'all_tasks': all_tasks,
+        'all_projects': all_projects,
+    }
+
+    template = 'Mainapp/invoice_form.html'
+    return render(request, template, context)
+
+def updateInvoice(request, pk):
+    page_title = 'mise à jour Facture'
+    tas = Invoice.objects.get(id=pk)
+    form = InvoiceForm(instance=tas)
+
+    if request.method == 'POST':
+        form = InvoiceForm(request.POST, instance=tas)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {
+        'title': page_title,
+        'form': form
+    }
+
+    template = 'partials/form.html'
+    return render(request, template, context)
+
+def deleteInvoice(request, pk):
+    page_title = 'Supprimer la Facture'
+    tas = Invoice.objects.get(id=pk)
 
     if request.method == 'POST':
         tas.delete()

@@ -1,0 +1,124 @@
+{% extends "base.html" %} {% block content %}
+<div class="row py-4 d-flex justify-content-center">
+  <div class="col">
+    <form action="" method="POST">
+      {% csrf_token %}
+      <p>
+        <label for="id_invoice_number">Numéro de facture&nbsp;:</label>
+        <input
+          type="text"
+          name="invoice_number"
+          class="form-control"
+          maxlength="50"
+          required=""
+          id="id_invoice_number"
+        />
+      </p>
+      <p>
+        <label for="id_project">Project&nbsp;:</label>
+        <select name="project" class="form-control" required="" id="id_project">
+          <option value="" selected="">---------</option>
+          {% for proj in all_projects %}
+            <option value="{{proj.id}}">{{proj.title}}</option>
+          {% endfor %}
+        </select>
+      </p>
+      <p>
+        <label>Détails de la facture&nbsp;:</label>
+        <div class="card-columns">
+          {% for task in all_tasks %}
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{task.title}}</h5>
+                <p class="card-text">{{task.description}}</p>
+              </div>
+              <div class="card-footer">
+                <input class="tasksBox" type="checkbox" id="id_{{task.id}}">
+                <label class="form-check-label text-uppercase font-weight-bold" for="id_{{task.id}}">{{task.title}}</label>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        {% comment %} TODO:
+          -submit l facture
+          -printi l facture 
+        {% endcomment %}
+        <textarea name="invoice_details" cols="100" title="value" hidden="true" placeholder="value" rows="10" required="true" id="id_invoice_details"></textarea>
+        <input type="button" onclick="calculeAll()" value="Calculer la Durée et coût total" class="btn btn-primary" id="calcule_btn">
+      </p>
+      <p>
+        <label for="id_project_duration">Durée&nbsp;:</label>
+        <input
+          type="number"
+          name="project_duration"
+          class="form-control"
+          required=""
+          id="id_project_duration"
+        />
+      </p>
+      <p>
+        <label for="id_total_cost">coût&nbsp;total&nbsp;:</label>
+        <input
+          type="number"
+          name="total_cost"
+          class="form-control"
+          required=""
+          id="id_total_cost"
+        />
+      </p>
+      
+      <p>
+        <label for="id_note">Remarque&nbsp;:</label>
+        <textarea
+          name="note"
+          cols="40"
+          rows="10"
+          class="form-control"
+          required=""
+          id="id_note"
+        ></textarea>
+      </p>
+      <input type="submit" value="Envoyer" class="btn btn-block btn-success" />
+    </form>
+  </div>
+</div>
+{% endblock content %}
+
+name
+{% block script %}
+  <script>
+    function calculeAll(){
+      checkBoxs = getAllCheckedBoxesIds()
+      total = 0
+      dure = 0
+      tas = ""
+      textarea = ""
+
+      {% for task in all_tasks%}
+        tas = "id_"+{{task.id}}
+        if(checkBoxs.includes(tas)){
+          //calcule
+          total += {{task.total_cost}}
+          dure += {{task.duration}}
+          textarea += "{title: '{{task.title}}',description: '{{task.description}}',cost_per_houre: {{task.cost_per_houre}},duration: {{task.duration}},total_cost: {{task.total_cost}}},"
+          
+        }
+      {% endfor %}
+
+      $('#id_total_cost').val(total)
+      $('#id_project_duration').val(dure)
+      $('#id_invoice_details').val("[ "+ textarea+" ]")
+    }
+
+    function getAllCheckedBoxesIds() {
+      checkBoxs = $('.tasksBox:checkbox:checked');
+      response = []
+      for (i=0;i<checkBoxs.length;i++)
+      {
+        id = checkBoxs[i].id
+        response.push(id)
+      }
+      return response;
+    }
+  </script>
+{% endblock script %}

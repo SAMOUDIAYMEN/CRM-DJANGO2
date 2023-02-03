@@ -1,9 +1,10 @@
 from django.forms import ModelForm
 from django import forms
-from Mainapp.models import Project,Customer,Profile,Task
+from Mainapp.models import Project,Customer,Profile,Task,Invoice
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -17,11 +18,6 @@ class ProjectForm(ModelForm):
             'title': forms.TextInput(attrs={'class':'form-control'}),
             'description': forms.Textarea(attrs={'class':'form-control'}),
             'customer': forms.Select(attrs={'class':'form-control'}),
-            'profile': forms.Select(attrs={'class':'form-control'}),
-            'created_date': forms.DateTimeInput(format=('%Y-%m-%d %H:%M'), attrs={'class':'form-control' , 'type' : 'datetime-local'}),
-            'end_date': forms.DateTimeInput(format=('%Y-%m-%d %H:%M'),attrs={'class':'form-control' , 'type' : 'datetime-local' }),
-            'progress': forms.NumberInput(attrs={'class':'form-control' , 'value':'0'}),
-            'status': forms.Select({'class':'form-control'},),
         }
 
 class TaskForm(ModelForm):
@@ -32,9 +28,24 @@ class TaskForm(ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class':'form-control'}),
             'description': forms.Textarea(attrs={'class':'form-control'}),
-            'project': forms.Select(attrs={'class':'form-control'}),
-            'created_date': forms.DateTimeInput(format=('%Y-%m-%d %H:%M'), attrs={'class':'form-control' , 'type' : 'datetime-local'}),
+            'cost_per_houre': forms.TextInput(attrs={'class':'form-control','type' : 'number'}),
+            'duration': forms.TextInput(attrs={'class':'form-control','type' : 'number'}),
+            'total_cost': forms.TextInput(attrs={'class':'form-control','type' : 'number'}),
         }
+
+class InvoiceForm(ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ('__all__')
+        
+        widgets = {
+            'invoice_number': forms.TextInput(attrs={'class':'form-control'}),
+            'project': forms.Select(attrs={'class':'form-control'}),
+            'invoice_details': forms.Textarea(attrs={'class':'form-control'}),
+            'project_duration': forms.TextInput(attrs={'class':'form-control','type' : 'number'}),
+            'note': forms.Textarea(attrs={'class':'form-control'}),
+        }
+        
 
 class CustomerForm(ModelForm):
     class Meta:

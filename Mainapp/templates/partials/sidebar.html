@@ -42,6 +42,12 @@
       <span>les clients</span></a>
   </li>
 
+  <li class="nav-item {% if request.resolver_match.url_name == 'invoice' %}active{% endif %}">
+    <a class="nav-link" href="{% url 'invoice' %}">
+      <i class="fas fa-fw fa-table"></i>
+      <span>les factures</span></a>
+  </li>
+
   <hr class="sidebar-divider my-0">
 
   <li class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">

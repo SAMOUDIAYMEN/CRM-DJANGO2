@@ -32,20 +32,10 @@ class Profile(AbstractBaseUser,PermissionsMixin):
 
 # MODELS DATABASES : PROJECT
 class Project(models.Model):
-    STATUS = (
-        ('en attente', 'en attente'),
-        ('en traitement', 'en traitement'),
-        ('fait', 'fait'),
-    )
-
     title = models.CharField('titre', max_length=50, null=True)
     description = models.TextField()
     customer = models.ForeignKey(Customer,on_delete=models.SET_NULL,null=True,verbose_name='client')
     profile = models.ForeignKey(Profile,on_delete=models.SET_NULL,null=True,verbose_name='profil')
-    created_date = models.DateTimeField('Date de création', null=True)
-    end_date = models.DateTimeField('Date de fin', null=True)
-    progress = models.IntegerField('progrès', null=True)
-    status = models.CharField('Status', choices=STATUS, max_length=200, null=True)
 
     def __str__(self):
         return self.title
@@ -54,8 +44,21 @@ class Project(models.Model):
 class Task(models.Model):
     title = models.CharField('titre', max_length=50, null=True)
     description = models.TextField()
-    project = models.ForeignKey(Project,on_delete=models.CASCADE,null=True)
-    created_date = models.DateTimeField('Date de création', auto_now_add=True, null=True)
+    cost_per_houre = models.FloatField('coût par heure', null=True)
+    duration = models.IntegerField('durée', null=True)
+    total_cost = models.IntegerField('coût total', null=True)
+    
+    def __str__(self):
+        return self.title
 
+# MODELS DATABASES : INVOICE
+class Invoice(models.Model):
+    invoice_number = models.CharField('Numéro de facture', max_length=50, null=True)
+    project = models.ForeignKey(Project,on_delete=models.CASCADE,null=True)
+    invoice_details = models.TextField('Détails de la facture', null=True)
+    project_duration = models.IntegerField('durée', null=True)
+    total_cost = models.FloatField('coût total', null=True)
+    note = models.TextField('Remarque', null=True)
+    
     def __str__(self):
         return self.title

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <div class="row py-4">
+      <div class="col-md-4">
+            <h5 class="text-capitalize">{{ title }} : {{ data_count }} </h5>
+            <hr>
+            <a href="{%url "create-Invoice" %}" class="btn btn-primary btn-sm btn-block text-capitalize">Créer une Facture</a>
+      </div>
+   </div>
+   
+
+
+   <div class="row py-4">
+      <div class="col-md">
+         <div class="card card-body">
+            <table class="table table-sm">
+               <tr>
+                  <th class="text-capitalize">Numéro de facture</th>
+                  <th class="text-capitalize">Projet</th>
+                  <th class="text-capitalize">durée</th>
+                  <th class="text-capitalize">modifier</th>
+                  <th class="text-capitalize">supprimer</th>
+               </tr>
+
+               {% for n in data %}
+                  <tr>
+                     <td> {{ n.invoice_number }} </td>
+                     <td> {{ n.project.title }} </td>
+                     <td> {{ n.project_duration }} </td>
+                     <td> {{ n.total_cost }} </td>
+                     <td class="font-weight-bold">
+                        <a href="{%url "update-Project" n.id %}" class="btn btn-sm btn-info">modifier</a> </td>
+                     <td class="font-weight-bold">
+                        <a href="{%url "delete-Project" n.id%}" class="btn btn-sm btn-danger">supprimer</a> </td>
+                  </tr>
+               {% endfor %}
+            </table>
+         </div>
+      </div>
+   </div>        
+{% endblock content %}
